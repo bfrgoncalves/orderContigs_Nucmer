@@ -13,9 +13,7 @@ def main():
 		print "usage: list_pickle_obj"
 
 	argumentList=[]
-	
-	print type(input_file)
-	print input_file
+
 	with open(input_file,'rb') as f:
 		argumentList = pickle.load(f)
 
