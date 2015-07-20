@@ -44,7 +44,7 @@ def orderContigs(args):
 
 	for i in onlyfiles:
 		countFiles += 1
-		listOfArgs = (os.path.join(args.q, i), args.r, args.o, countFiles, countFiles)
+		listOfArgs = (os.path.join(currentDir, args.q, i), os.path.join(currentDir, args.r), os.path.join(currentDir, args.o), countFiles, countFiles)
 		action = 'NUCmer_Align'
 		job_args, allQueryBasePaths = create_pickle(listOfArgs, os.path.join(currentDir, args.o) , job_args, action, 'align', allQueryBasePaths, countFiles)
 	
