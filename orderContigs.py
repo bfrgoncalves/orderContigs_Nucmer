@@ -43,12 +43,38 @@ def orderContigs(args):
 		coordFile = deltaPath + '.coords'
 		with open(coordFile, "w") as outfile:
 			subprocess.call(['show-coords', '-r', '-c', '-l', deltaFilefiltered], stdout = outfile)
+			orderContigs(outfile)
+
 		#"delta-filter -i ".$minidentity." -l ".$minAlignment." ".$pathAligment." > ".$pathDeltaF;
         # exec($execution);
         # $execution="show-coords -r -c -l ".$pathDeltaF." > ".$pathCoords;
         os.remove(deltaFile)
         os.remove(deltaFilefiltered)
 
+
+def orderContigs(coordFile):
+	readCoordFile(coordFile)
+
+def readCoordFile(coordFile):
+
+	coordObject = {}
+	coordObject.results = []
+	with open(coordFile, "r") as outfile:
+		lengthFile = len(outfile)
+		for i in range(5, lengthFile-1):
+			line = outfile[i].split('\t')
+			lineObject = {}
+			lineObject.queryStart = line[1]
+			lineObject.queryEnd = line[2]
+			lineObject.refStart = line[4]
+			lineObject.refEnd = line[5]
+			lineObject.identity = line[10]
+			lineObject.reference = line[18]
+			lineObject.query = line[19]
+
+			coordObject.results.append(lineObject)
+
+	return coordObject
 
 if __name__ == "__main__":
     main()
