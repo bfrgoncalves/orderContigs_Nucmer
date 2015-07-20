@@ -18,8 +18,5 @@ def func_NUCmer_alignment(query, reference, outputFolder, countFiles):
 	coordFile = deltaPath + '.coords'
 	with open(coordFile, "w") as outfile:
 		subprocess.call(['show-coords', '-r', '-c', '-l', deltaFilefiltered], stdout = outfile)
-	#"delta-filter -i ".$minidentity." -l ".$minAlignment." ".$pathAligment." > ".$pathDeltaF;
-	# exec($execution);
-	# $execution="show-coords -r -c -l ".$pathDeltaF." > ".$pathCoords;
-	os.remove(deltaFile)
-	os.remove(deltaFilefiltered)
+
+	return deltaPath
