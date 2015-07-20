@@ -1,13 +1,17 @@
-
-
+#!/usr/bin/python
 import subprocess
 import argparse
 import os
 import shutil
 from os import listdir
 from os.path import isfile, join, isdir
-import sys
 from datetime import datetime
+
+
+from cluster_utils import create_pickle, create_Jobs
+from createStatusFile import createStatusFile, createMatrixFile
+import pickle
+import sys
 
 
 def main():
@@ -23,7 +27,12 @@ def main():
 
 def orderContigs(args):
 
+	print 'Running cluster version'
+
 	onlyfiles = [ f for f in listdir(args.q) if isfile(join(args.q,f)) ]
+
+	job_args = []
+	allQueryBasePaths = []
 
 	if not os.path.isdir(os.path.join(args.o)):
 		os.makedirs(os.path.join(args.o))
@@ -32,22 +41,10 @@ def orderContigs(args):
 
 	for i in onlyfiles:
 		countFiles += 1
-		deltaPath =  os.path.join(args.o, args.o + '_' + str(countFiles))
-		subprocess.call(['nucmer', '-p', deltaPath, args.r, os.path.join(args.q,i)]);
-		
-		deltaFile = deltaPath + '.delta'
-		deltaFilefiltered = deltaPath + 'Filtered.delta'
-		with open(deltaFilefiltered, "w") as outfile:
-			subprocess.call(['delta-filter', '-i', '0.8',  '-l', '1000', deltaFile], stdout = outfile);
-
-		coordFile = deltaPath + '.coords'
-		with open(coordFile, "w") as outfile:
-			subprocess.call(['show-coords', '-r', '-c', '-l', deltaFilefiltered], stdout = outfile)
-		#"delta-filter -i ".$minidentity." -l ".$minAlignment." ".$pathAligment." > ".$pathDeltaF;
-        # exec($execution);
-        # $execution="show-coords -r -c -l ".$pathDeltaF." > ".$pathCoords;
-        os.remove(deltaFile)
-        os.remove(deltaFilefiltered)
+		listOfArgs = (os.path.join(args.q, i), args.r, args.o, countFiles)
+		action = 'NUCmer_Align'
+		job_args, allQueryBasePaths = create_pickle(listOfArgs, args.o, job_args, action, 'align', allQueryBasePaths, countFiles)
+		create_Jobs(job_args, 'nucmer_Alignment.py', allQueryBasePaths)
 
 
 if __name__ == "__main__":
