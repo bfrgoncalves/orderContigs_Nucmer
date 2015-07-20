@@ -21,6 +21,6 @@ def func_NUCmer_alignment(query, reference, outputFolder, countFiles):
 		subprocess.call(['show-coords', '-r', '-c', '-l', deltaFilefiltered], stdout = outfile)
 
 	os.remove(deltaFile)
-	os.remove(coordFile)
+	os.remove(deltaFilefiltered)
 
 	return deltaPath
