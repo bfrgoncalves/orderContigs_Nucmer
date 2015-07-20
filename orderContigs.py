@@ -9,7 +9,6 @@ from datetime import datetime
 
 
 from cluster_utils import create_pickle, create_Jobs
-from createStatusFile import createStatusFile, createMatrixFile
 import pickle
 import sys
 
