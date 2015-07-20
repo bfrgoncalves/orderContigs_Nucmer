@@ -8,7 +8,7 @@ import sys
 def func_NUCmer_alignment(query, reference, outputFolder, countFiles):
 	
 	deltaPath =  os.path.join(outputFolder, outputFolder + '_' + str(countFiles))
-	
+	print deltaPath
 	subprocess.call(['nucmer', '-p', deltaPath, reference, query]);
 
 	deltaFile = deltaPath + '.delta'
