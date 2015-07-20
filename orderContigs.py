@@ -33,6 +33,10 @@ def orderContigs(args):
 	job_args = []
 	allQueryBasePaths = []
 
+	currentDir = os.getcwd()
+
+
+
 	if not os.path.isdir(os.path.join(args.o)):
 		os.makedirs(os.path.join(args.o))
 
@@ -42,7 +46,7 @@ def orderContigs(args):
 		countFiles += 1
 		listOfArgs = (os.path.join(args.q, i), args.r, args.o, countFiles, countFiles)
 		action = 'NUCmer_Align'
-		job_args, allQueryBasePaths = create_pickle(listOfArgs, args.o , job_args, action, 'align', allQueryBasePaths, countFiles)
+		job_args, allQueryBasePaths = create_pickle(listOfArgs, os.path.join(currentDir, args.o) , job_args, action, 'align', allQueryBasePaths, countFiles)
 	
 	create_Jobs(job_args, 'nucmer_Alignment.py', allQueryBasePaths)
 
