@@ -35,8 +35,6 @@ def orderContigs(args):
 
 	currentDir = os.getcwd()
 
-
-
 	if not os.path.isdir(os.path.join(args.o)):
 		os.makedirs(os.path.join(args.o))
 
