@@ -20,12 +20,12 @@ def main():
 		argumentList = pickle.load(f)
 
 
-	def ANI_calc(args):
-	    ANI_results = func_NUCmer_alignment(args[0], args[1], args[2], args[3])
+	def Nucmer_align(args):
+	    Nucmer_results = func_NUCmer_alignment(args[0], args[1], args[2], args[3])
 
-	    final =	(args[0], ANI_results)
+	    final =	(args[0], Nucmer_results)
 
-	    filepath=os.path.join(temppath , str(args[4]) +"_ANIcalc_result.txt")
+	    filepath=os.path.join(temppath , str(args[4]) +"_NUCmer_Align_result.txt")
 
 	    with open(filepath, 'wb') as f:
 			pickle.dump(final, f)
@@ -33,7 +33,7 @@ def main():
 	    return True
 
 
-	ANI_calc(argumentList)
+	Nucmer_align(argumentList)
 
 if __name__ == "__main__":
     main()

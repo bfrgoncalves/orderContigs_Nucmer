@@ -40,10 +40,19 @@ def orderContigs(args):
 
 	for i in onlyfiles:
 		countFiles += 1
-		listOfArgs = (os.path.join(args.q, i), args.r, args.o, countFiles)
+		listOfArgs = (os.path.join(args.q, i), args.r, args.o, countFiles, countFiles)
 		action = 'NUCmer_Align'
 		job_args, allQueryBasePaths = create_pickle(listOfArgs, args.o , job_args, action, 'align', allQueryBasePaths, countFiles)
 		create_Jobs(job_args, 'nucmer_Alignment.py', allQueryBasePaths)
+
+	countResults = 0
+	for i in allQueryBasePaths:
+		countResults += 1
+		filepath=os.path.join(i, str(countResults)+"_"+ action + "_result.txt")
+
+		with open(filepath,'rb') as f:
+			x = pickle.load(f)
+			print x
 
 
 if __name__ == "__main__":
