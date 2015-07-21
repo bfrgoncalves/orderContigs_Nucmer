@@ -3,6 +3,7 @@ import os
 import subprocess
 from datetime import datetime
 import sys
+import ntpath
 
 
 def func_NUCmer_alignment(query, reference, outputFolder, countFiles):
@@ -25,8 +26,14 @@ def func_NUCmer_alignment(query, reference, outputFolder, countFiles):
 
 
 	results = orderContigs(coordFile)
+	queryFileName = ntpath.basename(query)
+	queryFileName = queryFileName.split('.')
+	del queryFileName[-1]
 
-	resultsFile = deltaPath + '.tab'
+	queryFileName = '_'.join(queryFileName)
+
+
+	resultsFile = deltaPath + queryFileName + '.tab'
 	with open(resultsFile, "w") as outfile3:
 		outfile3.write('reference\tquery\trefStart\tqueryStart\trefEnd\tqueryEnd\tidentity\n')
 		for i in results:
