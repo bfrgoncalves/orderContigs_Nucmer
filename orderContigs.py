@@ -19,9 +19,9 @@ def main():
 
 	args = parser.parse_args()
 
-	orderContigs(args)
+	nucmer_Align(args)
 
-def orderContigs(args):
+def nucmer_Align(args):
 
 	onlyfiles = [ f for f in listdir(args.q) if isfile(join(args.q,f)) ]
 
@@ -32,47 +32,73 @@ def orderContigs(args):
 
 	for i in onlyfiles:
 		countFiles += 1
-		deltaPath =  os.path.join(args.o, args.o + '_' + str(countFiles))
+		deltaPath =  os.path.join(os.getcwd(), args.o, args.o + '_' + str(countFiles))
 		subprocess.call(['nucmer', '-p', deltaPath, args.r, os.path.join(args.q,i)]);
 		
 		deltaFile = deltaPath + '.delta'
 		deltaFilefiltered = deltaPath + 'Filtered.delta'
-		with open(deltaFilefiltered, "w") as outfile:
-			subprocess.call(['delta-filter', '-i', '0.8',  '-l', '1000', deltaFile], stdout = outfile);
+		
+		with open(deltaFilefiltered, "w") as outfile1:
+			subprocess.call(['delta-filter', '-i', '0.8',  '-l', '1000', deltaFile], stdout = outfile1);
 
 		coordFile = deltaPath + '.coords'
-		with open(coordFile, "w") as outfile:
-			subprocess.call(['show-coords', '-r', '-c', '-l', deltaFilefiltered], stdout = outfile)
-			orderContigs(outfile)
+		
+		with open(coordFile, "w") as outfile2:
+			subprocess.call(['show-coords', '-r', '-c', '-l', deltaFilefiltered], stdout = outfile2)
 
 		#"delta-filter -i ".$minidentity." -l ".$minAlignment." ".$pathAligment." > ".$pathDeltaF;
         # exec($execution);
         # $execution="show-coords -r -c -l ".$pathDeltaF." > ".$pathCoords;
         os.remove(deltaFile)
         os.remove(deltaFilefiltered)
+        
+        results = orderContigs(coordFile)
+
+        resultsFile = deltaPath + '.tab'
+
+        with open(resultsFile, "w") as outfile3:
+        	outfile3.write('reference\tquery\trefStart\tqueryStart\trefEnd\tqueryEnd\tidentity\n')
+        	for i in results:
+        		outfile3.write(i['reference']+'\t'+i['query'].strip('\n')+'\t'+i['refStart']+'\t'+i['queryStart']+'\t'+i['refEnd']+'\t'+i['queryEnd']+'\t'+i['identity']+'\n')
 
 
-def orderContigs(coordFile):
-	readCoordFile(coordFile)
 
-def readCoordFile(coordFile):
+def orderContigs(coordResults):
+
+	coordObject = readCoordFile(coordResults)
+	queryList = []
+	results = []
+	for i in coordObject['results']:
+		if i['query'] not in queryList:
+			results.append(i)
+			queryList.append(i['query'])
+
+	return results
+
+def readCoordFile(coordR):
 
 	coordObject = {}
-	coordObject.results = []
-	with open(coordFile, "r") as outfile:
-		lengthFile = len(outfile)
+	coordObject['results'] = []
+	with open(coordR, "r") as outfile:
+		allLines = outfile.readlines()
+		lengthFile = len(allLines)
 		for i in range(5, lengthFile-1):
-			line = outfile[i].split('\t')
-			lineObject = {}
-			lineObject.queryStart = line[1]
-			lineObject.queryEnd = line[2]
-			lineObject.refStart = line[4]
-			lineObject.refEnd = line[5]
-			lineObject.identity = line[10]
-			lineObject.reference = line[18]
-			lineObject.query = line[19]
+			line = allLines[i].split(' ')
+			inLine = []
+			for i in line:
+				if i != '':
+					inLine.append(i)
 
-			coordObject.results.append(lineObject)
+			lineObject = {}
+			lineObject['queryStart'] = inLine[0]
+			lineObject['queryEnd'] = inLine[1]
+			lineObject['refStart'] = inLine[3]
+			lineObject['refEnd'] = inLine[4]
+			lineObject['identity'] = inLine[9]
+			lineObject['reference'] = inLine[17].split('\t')[0]
+			lineObject['query'] = inLine[17].split('\t')[1]
+
+			coordObject['results'].append(lineObject)
 
 	return coordObject
 
