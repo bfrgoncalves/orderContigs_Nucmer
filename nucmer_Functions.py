@@ -26,12 +26,11 @@ def func_NUCmer_alignment(query, reference, outputFolder, countFiles):
 
 	results = orderContigs(coordFile)
 
-    resultsFile = deltaPath + '.tab'
-
-    with open(resultsFile, "w") as outfile3:
-    	outfile3.write('reference\tquery\trefStart\tqueryStart\trefEnd\tqueryEnd\tidentity\n')
-    	for i in results:
-    		outfile3.write(i['reference']+'\t'+i['query'].strip('\n')+'\t'+i['refStart']+'\t'+i['queryStart']+'\t'+i['refEnd']+'\t'+i['queryEnd']+'\t'+i['identity']+'\n')
+	resultsFile = deltaPath + '.tab'
+	with open(resultsFile, "w") as outfile3:
+		outfile3.write('reference\tquery\trefStart\tqueryStart\trefEnd\tqueryEnd\tidentity\n')
+		for i in results:
+			outfile3.write(i['reference']+'\t'+i['query'].strip('\n')+'\t'+i['refStart']+'\t'+i['queryStart']+'\t'+i['refEnd']+'\t'+i['queryEnd']+'\t'+i['identity']+'\n')
 
 	return deltaPath
 
