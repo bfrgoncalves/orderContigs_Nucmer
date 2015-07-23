@@ -36,4 +36,4 @@ For ANI analysis
 
 * Biopython http://www.biopython.org
 
-* MUMmer executables in the $PATH, or available on the command line (required for ANIm analysis) http://mummer.sourceforge.net/
+* MUMmer executables in the $PATH, or available on the command line (required for NUCmer alignemnt) http://mummer.sourceforge.net/
