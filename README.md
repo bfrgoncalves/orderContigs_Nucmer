@@ -30,7 +30,6 @@ Arguments:
 
 #Dependencies
 
-For ANI analysis
 
 * Biopython http://www.biopython.org
 
