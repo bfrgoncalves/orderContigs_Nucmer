@@ -6,7 +6,7 @@
 
 # Description 
 
-This program performs a NUCmer alignment of a set of query sequence files (.fasta) against a reference and returns a set of files with the contigs ordered. 
+This program performs a NUCmer alignment of a set of query sequence files (.fasta) against a reference and returns a set of files with the contigs ordered, in a .tab format. 
 
 Arguments:
  
