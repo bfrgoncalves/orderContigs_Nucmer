@@ -32,38 +32,46 @@ def nucmer_Align(args):
 		os.makedirs(os.path.join(args.o))
 
 	countFiles = 0
+	deltaPaths = []
 
 	for i in onlyfiles:
 		countFiles += 1
 		deltaPath =  os.path.join(os.getcwd(), args.o,  resultsFolderName + '_' + str(countFiles))
 		subprocess.call(['nucmer', '-p', deltaPath, args.r, os.path.join(args.q,i)]);
+
+		deltaPaths.append(deltaPath)
 		
 		deltaFile = deltaPath + '.delta'
 		deltaFilefiltered = deltaPath + 'Filtered.delta'
 		
 		with open(deltaFilefiltered, "w") as outfile1:
-			subprocess.call(['delta-filter', '-i', '0.8',  '-l', '1000', deltaFile], stdout = outfile1);
+			subprocess.call(['delta-filter', '-i', '0.8',  '-l', '1000', deltaFile], stdout = outfile1)
 
 		coordFile = deltaPath + '.coords'
 		
 		with open(coordFile, "w") as outfile2:
 			subprocess.call(['show-coords', '-r', '-c', '-l', deltaFilefiltered], stdout = outfile2)
 
-		#"delta-filter -i ".$minidentity." -l ".$minAlignment." ".$pathAligment." > ".$pathDeltaF;
-        # exec($execution);
-        # $execution="show-coords -r -c -l ".$pathDeltaF." > ".$pathCoords;
-        os.remove(deltaFile)
-        os.remove(deltaFilefiltered)
-        
-        results = orderContigs(coordFile)
+		
+		try:
+			os.remove(deltaFile)
+			os.remove(deltaFilefiltered)
 
-        resultsFile = deltaPath + '.tab'
+			results = orderContigs(coordFile)
 
-        with open(resultsFile, "w") as outfile3:
-        	outfile3.write('reference\tquery\trefStart\tqueryStart\trefEnd\tqueryEnd\tidentity\n')
-        	for i in results:
-        		outfile3.write(i['reference']+'\t'+i['query'].strip('\n')+'\t'+i['refStart']+'\t'+i['queryStart']+'\t'+i['refEnd']+'\t'+i['queryEnd']+'\t'+i['identity']+'\n')
+			resultsFile = os.path.join(os.getcwd(), args.o,  resultsFolderName + os.path.splitext(i)[0]) + '.tab'
 
+			with open(resultsFile, "w") as outfile3:
+				outfile3.write('reference\tquery\trefStart\tqueryStart\trefEnd\tqueryEnd\tidentity\n')
+				for i in results:
+					outfile3.write(i['reference']+'\t'+i['query'].strip('\n')+'\t'+i['refStart']+'\t'+i['queryStart']+'\t'+i['refEnd']+'\t'+i['queryEnd']+'\t'+i['identity']+'\n')
+
+			os.remove(coordFile)
+
+		except OSError:
+			"Not a sequence file"
+
+		
 
 
 def orderContigs(coordResults):
