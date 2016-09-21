@@ -62,11 +62,11 @@ def nucmer_Align(args):
 			resultsFile = os.path.join(os.getcwd(), args.o,  resultsFolderName + os.path.splitext(i)[0]) + '.tab'
 
 			with open(resultsFile, "w") as outfile3:
-				outfile3.write('reference\tquery\trefStart\tqueryStart\trefEnd\tqueryEnd\tidentity\n')
+				outfile3.write('reference\tquery\trefStart\trefEnd\tqueryStart\tqueryEnd\tidentity\n')
 				for i in results:
-					outfile3.write(i['reference']+'\t'+i['query'].strip('\n')+'\t'+i['refStart']+'\t'+i['queryStart']+'\t'+i['refEnd']+'\t'+i['queryEnd']+'\t'+i['identity']+'\n')
+					outfile3.write(i['reference']+'\t'+i['query'].strip('\n')+'\t'+i['refStart']+'\t'+i['refEnd']+'\t'+i['queryStart']+'\t'+i['queryEnd']+'\t'+i['identity']+'\n')
 
-			os.remove(coordFile)
+			#os.remove(coordFile)
 
 		except OSError:
 			"Not a sequence file"
@@ -79,6 +79,7 @@ def orderContigs(coordResults):
 	coordObject = readCoordFile(coordResults)
 	queryList = []
 	results = []
+
 	for i in coordObject['results']:
 		if i['query'] not in queryList:
 			results.append(i)
@@ -101,10 +102,10 @@ def readCoordFile(coordR):
 					inLine.append(i)
 
 			lineObject = {}
-			lineObject['queryStart'] = inLine[0]
-			lineObject['queryEnd'] = inLine[1]
-			lineObject['refStart'] = inLine[3]
-			lineObject['refEnd'] = inLine[4]
+			lineObject['refStart'] = inLine[0]
+			lineObject['refEnd'] = inLine[1]
+			lineObject['queryStart'] = inLine[3]
+			lineObject['queryEnd'] = inLine[4]
 			lineObject['identity'] = inLine[9]
 			lineObject['reference'] = inLine[17].split('\t')[0]
 			lineObject['query'] = inLine[17].split('\t')[1]
