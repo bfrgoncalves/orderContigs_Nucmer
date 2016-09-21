@@ -81,9 +81,9 @@ def orderContigs(coordResults):
 	results = []
 
 	for i in coordObject['results']:
-		if i['query'] not in queryList:
-			results.append(i)
-			queryList.append(i['query'])
+		#if i['query'] not in queryList:
+		results.append(i)
+			#queryList.append(i['query'])
 
 	return results
 
